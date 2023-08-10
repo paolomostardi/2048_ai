@@ -12,16 +12,18 @@ import random
 """
 
 
+
+
 class Board2048:
     def __init__(self, size, screen):
 
-        [255, 255, 255]
         self.square_list = []
-
+        self.orange = (255, 127, 80)
+        self.size = size
         for i in range(4):
             for j in range(4):
                 rect = pygame.Rect(i * 110 + 350, j * 110 + 50, 100, 100)
-                self.square_list.append((screen, [255, 255, 255], rect, 0))
+                self.square_list.append([screen, [255, 255, 255], rect, 0])
 
         self.generate_entry()
 
@@ -36,14 +38,35 @@ class Board2048:
                 empty_squares.append(square)
         return empty_squares
 
-    def generate_entry(self):
-        empty_squares = self.get_all_empty_squares()
-        square = random.choice(empty_squares)
-        print(square)
-        square[1][1] = 10
+    def get_all_full_squares(self):
+        full_squares = []
+        for square in self.square_list:
+            if square[3] is not 0:
+                full_squares.append(square)
+        return full_squares
+
+    def get_position_of_square(self):
+
         return
 
+    def generate_entry(self):
+        empty_squares = self.get_all_empty_squares()
+        if not empty_squares:
+            self.game_finish()
+            return
+        square = random.choice(empty_squares)
+        square[3] = 2
+        square[1] = self.orange
+        return
 
+    def on_move_down(self):
+        full_squares = self.get_all_full_squares()
+
+        return
+
+    def game_finish(self):
+
+        return
 
 def main():
 
@@ -70,9 +93,11 @@ def main():
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
-                    board.generate_entry()
+                    board.on_move_down()
                 elif event.key == pygame.K_UP:
                     print('hello')
+                board.generate_entry()
+
 
         screen.fill((200, 200, 200))
         rectangle = (20,20, 100, 50)
