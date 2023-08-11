@@ -1,6 +1,7 @@
 import pygame
 import random
-
+from logic2048 import Logic2048
+import math
 
 """
 
@@ -15,64 +16,56 @@ import random
 
 
 class Board2048:
-    def __init__(self, size, screen):
+    def __init__(self, size, padding, screen):
 
+        self.grey = (224, 224, 224)
+        self.screen = screen
+
+        self.padding = padding
         self.square_list = []
         self.orange = (255, 127, 80)
-        self.size = size
-        for i in range(4):
-            for j in range(4):
-                rect = pygame.Rect(i * 110 + 350, j * 110 + 50, 100, 100)
-                self.square_list.append([screen, [255, 255, 255], rect, 0])
-
-        self.generate_entry()
+        self.size = size/4
+        self.logical_board = Logic2048()
 
     def render(self):
-        for square in self.square_list:
-            pygame.draw.rect(square[0], square[1], square[2])
+        for index, square in enumerate(self.logical_board.square_list):
+            x, y = self.calculate_coordinates(index)
+            color = self.get_color_from_number(square)
+            rectangle = pygame.Rect(self.size, self.size, x, y)
 
-    def get_all_empty_squares(self):
-        empty_squares = []
-        for square in self.square_list:
-            if square[3] == 0:
-                empty_squares.append(square)
-        return empty_squares
+            pygame.draw.rect(self.screen, color, rectangle)
 
-    def get_all_full_squares(self):
-        full_squares = []
-        for square in self.square_list:
-            if square[3] is not 0:
-                full_squares.append(square)
-        return full_squares
+    def calculate_coordinates(self, index):
+        padding = self.padding
 
-    def get_position_of_square(self):
+        if index == 0:
+            return 0, 0
 
-        return
+        x = 4 % index
+        y = index // 4
+        x *= self.size + padding
+        y *= self.size + padding
 
-    def generate_entry(self):
-        empty_squares = self.get_all_empty_squares()
-        if not empty_squares:
-            self.game_finish()
-            return
-        square = random.choice(empty_squares)
-        square[3] = 2
-        square[1] = self.orange
-        return
+        return x, y
 
     def on_move_down(self):
-        full_squares = self.get_all_full_squares()
+        self.logical_board.slide_down()
 
-        return
 
-    def game_finish(self):
+    def get_color_from_number(self,square):
+        color = self.grey
 
-        return
+        if square != 0:
+            color = math.log2(square)
+
+        return self.grey
 
 def main():
 
     WIDTH = 1200
     HEIGHT = 800
     board_size = 700
+    padding = 100
 
     running = True
 
@@ -80,7 +73,7 @@ def main():
     framerate = 15
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-    board = Board2048(board_size, screen)
+    board = Board2048(board_size, padding, screen)
 
     while running:
 
