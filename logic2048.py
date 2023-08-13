@@ -33,7 +33,17 @@ class Logic2048:
         self.square_list[square_index] = 2
 
     def slide_down(self):
-        self.generate_entry()
+        for index, square in enumerate(self.square_list):
+            print(index)
+            index = len(self.square_list) - index - 1
+            print(index)
+            if index - 3 == 0:
+                self.generate_entry()
+                return
+            if self.square_list[index] == self.square_list[index - 4]:
+                self.square_list[index - 4] = 0
+                self.square_list[index] *= 2
+
         return
 
     def game_finish(self):
