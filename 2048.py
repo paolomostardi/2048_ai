@@ -61,7 +61,7 @@ class Board2048:
         return x, y
 
     def on_move_down(self):
-        self.logical_board.slide_down()
+        self.logical_board.on_down()
 
     def get_color_from_number(self,square):
         color = self.grey

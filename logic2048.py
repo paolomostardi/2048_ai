@@ -32,19 +32,34 @@ class Logic2048:
         square_index = random.choice(empty_squares)
         self.square_list[square_index] = 2
 
-    def slide_down(self):
+    def merge_down(self):
         for index, square in enumerate(self.square_list):
-            print(index)
             index = len(self.square_list) - index - 1
-            print(index)
             if index - 3 == 0:
-                self.generate_entry()
                 return
             if self.square_list[index] == self.square_list[index - 4]:
                 self.square_list[index - 4] = 0
                 self.square_list[index] *= 2
 
         return
+
+    def move_all_tiles_down(self):
+        for index, square in enumerate(self.square_list):
+            length_list = len(self.square_list)
+            index = length_list - index - 1
+
+            while index + 4 < length_list:
+                if self.square_list[index + 4] == 0:
+                    self.square_list[index + 4] = self.square_list[index]
+                    self.square_list[index] = 0
+                index += 4
+
+        return
+
+    def on_down(self):
+        self.move_all_tiles_down()
+        self.merge_down()
+        self.generate_entry()
 
     def game_finish(self):
         return
