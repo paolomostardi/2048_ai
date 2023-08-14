@@ -12,17 +12,14 @@ import copy
 12 13 14 15
 
 
-rect = pygame.Rect(i * 110 + 350, j * 110 + 50, 100, 100)
-
-
+pygame.Rect(x, y, width, height)
 
 
 """
 
 
-
-
 class Board2048:
+
     def __init__(self, size, padding, screen):
 
         self.grey = [224, 224, 224]
@@ -40,7 +37,7 @@ class Board2048:
             x, y = self.calculate_coordinates(index)
             color = self.get_color_from_number(square)
 
-            rectangle = pygame.Rect(x,y, self.size-5, self.size-5)
+            rectangle = pygame.Rect(x, y, self.size-5, self.size-5)
 
             pygame.draw.rect(self.screen, color, rectangle)
 
@@ -63,7 +60,16 @@ class Board2048:
     def on_move_down(self):
         self.logical_board.on_down()
 
-    def get_color_from_number(self,square):
+    def on_move_left(self):
+        self.logical_board.on_left()
+
+    def on_move_right(self):
+        self.logical_board.on_right()
+
+    def on_move_up(self):
+        self.logical_board.on_up()
+
+    def get_color_from_number(self, square):
         color = self.grey
 
         if square != 0:
@@ -78,7 +84,7 @@ class Board2048:
 
 def main():
 
-    WIDTH = 800
+    WIDTH = 1000
     HEIGHT = 800
     board_size = 750
     padding = 25
@@ -97,16 +103,18 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-               print('hello')
-
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
                     board.on_move_down()
+
+                elif event.key == pygame.K_LEFT:
+                    board.on_move_left()
+
+                elif event.key == pygame.K_RIGHT:
+                    board.on_move_right()
+
                 elif event.key == pygame.K_UP:
-                    print('hello')
-
-
+                    board.on_move_up()
 
         screen.fill((200, 200, 200))
         rectangle = (20,20, 100, 50)
