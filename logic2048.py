@@ -33,6 +33,8 @@ class Logic2048:
         self.square_list[square_index] = 2
 
     def merge_down(self):
+        action_performed = False
+
         for index, square in enumerate(self.square_list):
             index = len(self.square_list) - index - 1
             if index - 3 == 0:
@@ -40,10 +42,12 @@ class Logic2048:
             if self.square_list[index] == self.square_list[index - 4]:
                 self.square_list[index - 4] = 0
                 self.square_list[index] *= 2
+                action_performed = True
 
-        return
+        return action_performed
 
     def merge_up(self):
+        action_performed = False
 
         for index, square in enumerate(self.square_list):
             if index < 3:
@@ -51,10 +55,13 @@ class Logic2048:
             elif self.square_list[index] == self.square_list[index - 4]:
                 self.square_list[index - 4] = self.square_list[index] * 2
                 self.square_list[index] = 0
+                action_performed = True
 
-        return
+        return action_performed
 
     def merge_left(self):
+        action_performed = False
+
         for index, square in enumerate(self.square_list):
 
             if square == 0:
@@ -65,10 +72,13 @@ class Logic2048:
             elif self.square_list[index] == self.square_list[index - 1]:
                 self.square_list[index - 1] = self.square_list[index] * 2
                 self.square_list[index] = 0
+                action_performed = True
 
-        return
+        return action_performed
 
     def merge_right(self):
+        action_performed = False
+
         for index, square in enumerate(self.square_list):
 
             if square == 0:
@@ -79,10 +89,13 @@ class Logic2048:
             elif self.square_list[index] == self.square_list[index + 1]:
                 self.square_list[index + 1] = self.square_list[index] * 2
                 self.square_list[index] = 0
+                action_performed = True
 
-        return
+        return action_performed
 
     def move_all_tiles_down(self):
+        action_performed = False
+
         for index, square in enumerate(self.square_list):
             length_list = len(self.square_list)
             index = length_list - index - 1
@@ -91,11 +104,15 @@ class Logic2048:
                 if self.square_list[index + 4] == 0:
                     self.square_list[index + 4] = self.square_list[index]
                     self.square_list[index] = 0
+                    action_performed = True
+
                 index += 4
 
-        return
+        return action_performed
 
     def move_all_tiles_up(self):
+        action_performed = False
+
         for index, square in enumerate(self.square_list):
             length_list = len(self.square_list)
 
@@ -103,52 +120,68 @@ class Logic2048:
                 if self.square_list[index - 4] == 0:
                     self.square_list[index - 4] = self.square_list[index]
                     self.square_list[index] = 0
+                    action_performed = True
+
                 index -= 4
 
-        return
+        return action_performed
 
     def move_all_tiles_left(self):
+        action_performed = False
+
         for index, square in enumerate(self.square_list):
 
             while index % 4 != 0:
                 if self.square_list[index - 1] == 0:
                     self.square_list[index - 1] = self.square_list[index]
                     self.square_list[index] = 0
+                    action_performed = True
+
                 index -= 1
 
-        return
+        return action_performed
 
     def move_all_tiles_right(self):
+        action_performed = False
         for index, square in enumerate(self.square_list):
 
             while index % 4 != 3:
                 if self.square_list[index + 1] == 0:
                     self.square_list[index + 1] = self.square_list[index]
                     self.square_list[index] = 0
+                    action_performed = True
                 index += 1
 
-        return
+        return action_performed
 
     def on_down(self):
         self.move_all_tiles_down()
         self.merge_down()
+        self.move_all_tiles_down()
+
         self.generate_entry()
 
     def on_left(self):
         self.move_all_tiles_left()
         self.merge_left()
+        self.move_all_tiles_left()
+
         self.generate_entry()
         return
 
     def on_right(self):
         self.move_all_tiles_right()
         self.merge_right()
+        self.move_all_tiles_right()
+
         self.generate_entry()
         return
 
     def on_up(self):
         self.move_all_tiles_up()
         self.merge_up()
+        self.move_all_tiles_up()
+
         self.generate_entry()
         return
 
