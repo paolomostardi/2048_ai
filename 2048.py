@@ -47,6 +47,9 @@ class Board2048:
             if square != 0:
                 self.screen.blit(text_surface, (x + 75, y + 50))
 
+        text_surface = self.font.render(str(self.logical_board.score), False, (255, 120, 0))
+        self.screen.blit(text_surface, (self.size * 4 + self.padding * 2, self.size - self.padding))
+
     def calculate_coordinates(self, index):
         padding = self.padding
 
@@ -90,7 +93,7 @@ class Board2048:
 
 def main():
 
-    WIDTH = 1000
+    WIDTH = 1200
     HEIGHT = 800
     board_size = 750
     padding = 25
